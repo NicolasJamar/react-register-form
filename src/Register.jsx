@@ -8,7 +8,7 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = "/register";
 
 const Register = () => {
-  const userRef = useRef();
+  const userRef = useRef(); //to set the focus on when the component load
   const errRef = useRef();
 
   const [user, setUser] = useState('');
@@ -50,9 +50,9 @@ const Register = () => {
     setErrMsg('')
   }, [user, pwd, matchPwd])
 
-  
+
   const handleSubmit = async(e) => {
-    e.preventDefault();
+    e.preventDefault(); // the default behavior of the form reload the page
 
     const v1 = USER_REGEX.test(user)
     const v2 = PWD_REGEX.test(pwd)
