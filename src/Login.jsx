@@ -10,10 +10,7 @@ const Login = () => {
   const errRef = useRef();
 
   const [user, setUser] = useState('');
-  const [userFocus, setUserFocus] = useState(false);
-
   const [pwd, setPwd] = useState('');
-  const [pwdFocus, setPwdFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
@@ -30,16 +27,17 @@ const Login = () => {
     e.preventDefault(); // the default behavior of the form reload the page
 
     try {
-      const response = await axios.get(AUTH_URL, 
+      const response = await axios.post(AUTH_URL, 
         JSON.stringify({user, pwd}),
         {
           headers: {'Content-Type': 'application/json'},
           withCredentials: true
         }
       );
-      console.log(response.data);
-      console.log(response.accessTokken);
-      console.log(JSON.stringify(response));
+      console.log(JSON.stringify(response?.data));
+      const accessToken = response?.data?.accessTokken;
+      const roles = response?.data?.roles;
+      setAuth({user, pwd, roles, accessToken})
       setSuccess(true); 
       // clear input fields
       setUser('');
@@ -47,9 +45,14 @@ const Login = () => {
     } catch(err) {
       if(!err?.response) {
         setErrMsg('No server response');
+      } else if(err.response?.status === 400) {
+        setErrMsg('Missing username or password')
       } else if(err.response?.status === 401) {
         setErrMsg('Not authorized')
+      } else {
+        setErrMsg('Login Failed')
       }
+      errRef.current.focus(); //set the focus on the error for accessibility
     }
   }
 
@@ -79,8 +82,6 @@ const Login = () => {
             onChange={(e) => setUser(e.target.value)}
             value={user} //to clear the input after submission
             required
-            onFocus={() => setUserFocus(true)}
-            onBlur={() => setUserFocus(false)}
           />
 
           {/*PASSWORD*/}
