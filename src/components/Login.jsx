@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../api/axios";
 
 const AUTH_URL = "/auth";
@@ -40,7 +40,7 @@ const Login = () => {
         }
       );
       console.log(JSON.stringify(response?.data));
-      const accessToken = response?.data?.accessTokken;
+      const accessToken = response?.data?.accessToken;
       const roles = response?.data?.roles;
       setAuth({user, pwd, roles, accessToken})
       // clear input fields
