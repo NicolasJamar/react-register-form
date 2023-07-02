@@ -6,7 +6,7 @@ const USERS_URL = '/users';
 const Users = () => {
   const [users, setUsers] = useState();
 
-
+  // useEffect because we want to wait component is mounted before loading
   useEffect( () => {
     let isMounted = true;
     const controller = new AbortController(); // To cancel a request
