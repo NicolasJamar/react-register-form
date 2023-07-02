@@ -6,15 +6,30 @@ const USERS_URL = '/users';
 const Users = () => {
   const [users, setUsers] = useState();
 
+
   useEffect( () => {
     let isMounted = true;
-    const controller = new AbortController();
+    const controller = new AbortController(); // To cancel a request
 
     const getUsers = async() => {
-      const response = axios.get(USERS_URL, 
-        )
+      try {
+        const response = await axios.get(USERS_URL,
+          {signal: controller.signal})
+        console.log(response.data);
+        // if isMounted is true then (&&) do something
+        isMounted && setUsers(response.data)
+      } catch(err) {
+        console.error(err);
+      }
     }
 
+    getUsers();
+
+    //clean up function of useEffect
+    return () => {
+      isMounted = false;
+      controller.abort(); // cancel the request
+    }
   }, [])
 
   return(
