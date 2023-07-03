@@ -4,6 +4,7 @@ import useAuth from "./useAuth"
 const useRefreshToken = () => {
   const { setAuth } = useAuth();
 
+  // Here we refresh the token if the first attempt failed with the previous token 
   const refresh = async() => {
     const response = await axios.get('/refresh', {
       withCredentials: true
