@@ -1,10 +1,16 @@
-import { useState, useEffect } from "react";
-import axios from "../api/axios";
+import { useState, useEffect, useRef } from "react";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const USERS_URL = '/users';
 
 const Users = () => {
+  const effectRan = useRef(false);
+
   const [users, setUsers] = useState();
+  const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // useEffect because we want to wait component is mounted before loading
   useEffect( () => {
@@ -13,22 +19,27 @@ const Users = () => {
 
     const getUsers = async() => {
       try {
-        const response = await axios.get(USERS_URL,
+        const response = await axiosPrivate.get(USERS_URL,
           {signal: controller.signal})
-        console.log(response.data);
-        // if isMounted is true then (&&) do something
-        isMounted && setUsers(response.data)
-      } catch(err) {
-        console.error(err);
+          console.log(response.data);
+          // if isMounted is true then (&&) do something
+          isMounted && setUsers(response.data)
+        } catch(err) {
+          console.error(err);
+          // to redirect where the user come from
+          navigate('/login', { state: { from: location }, replace: true });
+        }
       }
+      
+    if(effectRan.current === true) {
+      getUsers();
     }
-
-    getUsers();
-
-    //clean up function of useEffect
+      
+      //clean up function of useEffect
     return () => {
       isMounted = false;
       controller.abort(); // cancel the request
+      effectRan.current = true
     }
   }, [])
 
@@ -38,9 +49,9 @@ const Users = () => {
       { users?.length 
         ? ( 
             <ul>
-              {users.map( (user, i) => {
-                <li key={i} >{user.name}</li>
-              })}
+              {users.map( (user, i) => 
+                <li key={i} >{user.username}</li>
+              )}
             </ul> 
         ) : <p>No user to display</p>
       }

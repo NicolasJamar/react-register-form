@@ -13,10 +13,10 @@ const useRefreshToken = () => {
       console.log(JSON.stringify(prev)); // to look the previous state
       console.log(response.data.accessToken);
       return { ...prev, accessToken: response.data.accessToken }
-    })
+    });
     return response.data.accessToken;
   }
   return refresh;
 }
 
-export default useRefreshToken
+export default useRefreshToken;
