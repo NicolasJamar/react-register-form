@@ -30,12 +30,13 @@ const Users = () => {
           navigate('/login', { state: { from: location }, replace: true });
         }
       }
-      
+    
+    // to stop useEffect from running twice on mount or first render
     if(effectRan.current === true) {
       getUsers();
     }
       
-      //clean up function of useEffect
+    //clean up function of useEffect
     return () => {
       isMounted = false;
       controller.abort(); // cancel the request
