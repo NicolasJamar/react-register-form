@@ -21,7 +21,7 @@ const Users = () => {
       try {
         const response = await axiosPrivate.get(USERS_URL,
           {signal: controller.signal})
-          console.log(response.data);
+          console.log('from Users :', response.data);
           // if isMounted is true then (&&) do something
           isMounted && setUsers(response.data)
         } catch(err) {
