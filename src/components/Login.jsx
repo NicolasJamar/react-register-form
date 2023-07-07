@@ -6,7 +6,7 @@ import axios from "../api/axios";
 const AUTH_URL = "/auth";
 
 const Login = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -62,6 +62,16 @@ const Login = () => {
     }
   }
 
+  const togglePersist = () => {
+    // take the previous state and change with the opposit
+    setPersist(prev => !prev) 
+  }
+
+  // we need a useEffect if the persist state changes
+  useEffect(() => {
+    localStorage.setItem("persist", persist)
+  }, [persist])
+
   return (
     <section>
       <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
@@ -90,14 +100,21 @@ const Login = () => {
           required
         />
 
-        <button>
-          Sign In
-        </button>
+        <button>Sign In</button>
+        <div className="persistCheck">
+          <input 
+            type="checkbox"
+            id="persist" 
+            onChange={togglePersist}
+            checked={persist}
+          />
+          <label htmlFor="persist">Trust This Device</label>
+        </div>
+        <br />
         <p>
           Need an Account?<br />
           <span className="line">
-              {/*put router link here*/}
-              <a href="#">Sign Up</a>
+            <a href="/register">Sign Up</a>
           </span>
         </p>
       </form>
