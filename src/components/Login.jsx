@@ -1,8 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "../api/axios";
+import useLocalStorage from "../hooks/useLocalStorage";
 
+import axios from "../api/axios";
 const AUTH_URL = "/auth";
 
 const Login = () => {
@@ -15,7 +16,7 @@ const Login = () => {
   const userRef = useRef(); //to set the focus on when the component load
   const errRef = useRef();
 
-  const [user, setUser] = useState('');
+  const [user, setUser] = useLocalStorage('user', '');
   const [pwd, setPwd] = useState('');
 
   const [errMsg, setErrMsg] = useState('');
