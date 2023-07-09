@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
 import useLocalStorage from "../hooks/useLocalStorage";
+import useInput from "../hooks/useInput";
 
 import axios from "../api/axios";
 const AUTH_URL = "/auth";
@@ -16,7 +17,7 @@ const Login = () => {
   const userRef = useRef(); //to set the focus on when the component load
   const errRef = useRef();
 
-  const [user, setUser] = useLocalStorage('user', '');
+  const [user, resetUser, userAttribs] = useInput('user', '');
   const [pwd, setPwd] = useState('');
 
   const [errMsg, setErrMsg] = useState('');
@@ -45,7 +46,7 @@ const Login = () => {
       const roles = response?.data?.roles;
       setAuth({user, pwd, roles, accessToken})
       // clear input fields
-      setUser('');
+      resetUser();
       setPwd('');
       // after log in we want to navigate where the user wanted to go 
       navigate(from, { replace: true });
@@ -86,8 +87,9 @@ const Login = () => {
           id="username" 
           ref={userRef}
           autoComplete="off"
-          onChange={(e) => setUser(e.target.value)}
-          value={user} //to clear the input after submission
+          {...userAttribs}
+          //onChange={(e) => resetUser(e.target.value)}
+          //value={user} //to clear the input after submission
           required
         />
 
