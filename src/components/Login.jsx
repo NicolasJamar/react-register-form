@@ -8,7 +8,7 @@ import axios from "../api/axios";
 const AUTH_URL = "/auth";
 
 const Login = () => {
-  const { setAuth, persist, setPersist } = useAuth();
+  const { setAuth } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,7 +46,7 @@ const Login = () => {
       console.log(JSON.stringify(response?.data));
       const accessToken = response?.data?.accessToken;
       const roles = response?.data?.roles;
-      setAuth({user, pwd, roles, accessToken})
+      setAuth({user, roles, accessToken})
       // clear input fields
       resetUser();
       setPwd('');

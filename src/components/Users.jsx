@@ -21,9 +21,10 @@ const Users = () => {
       try {
         const response = await axiosPrivate.get(USERS_URL,
           {signal: controller.signal})
+          const userNames = response.data.map(user => user.username);
           console.log('from Users :', response.data);
           // if isMounted is true then (&&) do something
-          isMounted && setUsers(response.data)
+          isMounted && setUsers(userNames)
         } catch(err) {
           console.error(err);
           // to redirect where the user come from
@@ -51,7 +52,7 @@ const Users = () => {
         ? ( 
             <ul>
               {users.map( (user, i) => 
-                <li key={i} >{user.username}</li>
+                <li key={i} >{user}</li>
               )}
             </ul> 
         ) : <p>No user to display</p>
